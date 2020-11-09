@@ -1,6 +1,15 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const cors = require('cors');
+
+app.use(
+    cors({
+        allowedHeaders: '*',
+        origin: '*',
+        methods: '*',
+    })
+);
 app.use(bodyParser.json());
 
 const port = 3300;
@@ -27,10 +36,10 @@ const todos = [];
  * Delete
  */
 
-app.post('/todos-find', (req, res, next) => {
-    const id = +req.body.id;
-    res.json(todos.find((t) => t.id === id));
-});
+// app.post('/todos-find', (req, res, next) => {
+//     const id = +req.body.id;
+//     res.json(todos.find((t) => t.id === id));
+// });
 
 app.post('/todos', (req, res, next) => {
     const id = todos.length + 1;
@@ -52,8 +61,19 @@ app.patch('/todos/:id', (req, res, next) => {
     }
 });
 
+app.get('/todos', (req, res) => {
+    res.json(todos);
+});
+
 app.get('/todos/:id', (req, res) => {
     res.json(todos.find((t) => t.id === +req.params.id));
+});
+app.delete('/todos/:id', (req, res) => {
+    const index = todos.findIndex((t) => t.id === +req.params.id);
+    if (index >= 0) {
+        todos.splice(index, 1);
+    }
+    res.json();
 });
 
 app.listen(port, (err) => {
