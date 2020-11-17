@@ -6,11 +6,12 @@ function saveTodo() {
         description: document.getElementById('description').value,
     };
     if (id === undefined) {
-        fetch('http://localhost:3300/todos', {
+        fetch('http://localhost:3000/todos', {
             method: 'POST',
             body: JSON.stringify(todo),
             headers: {
                 'Content-Type': 'application/json',
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`,
             },
         })
             .then((res) => res.json())
@@ -21,11 +22,12 @@ function saveTodo() {
             })
             .catch((err) => console.error(err));
     } else {
-        fetch(`http://localhost:3300/todos/${id}`, {
+        fetch(`http://localhost:3000/todos/${id}`, {
             method: 'PATCH',
             body: JSON.stringify(todo),
             headers: {
                 'Content-Type': 'application/json',
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`,
             },
         })
             .then((res) => res.json())
@@ -45,7 +47,11 @@ function saveTodo() {
 function listTodos() {
     const todosContainer = document.getElementById('todos');
     (Array.from(todosContainer.children) || []).forEach((c) => c.remove());
-    fetch('http://localhost:3300/todos')
+    fetch('http://localhost:3000/todos', {
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+    })
         .then((res) => {
             return res.json();
         })
@@ -60,23 +66,42 @@ window.onload = function () {
     listTodos();
 };
 function appendTodo(todo, todosContainer) {
-    console.log(todo);
     const li = document.createElement('li');
     li.setAttribute(
         'class',
         'my-2 p-3 border rounded d-flex flex-wrap justify-content-between'
     );
-    li.setAttribute('id', todo.id);
+    li.setAttribute('id', todo._id);
     li.innerHTML = `
                <div class="title">${todo.title}</div>
                <div class="status">
+                  <span>${todo.isComplete ? '(Complete)' : '(Pending)'}</span>
                   <input type="checkbox">
                </div>`;
     li.onclick = function (ev) {
         document.getElementById('title').value = todo.title;
         document.getElementById('description').value = todo.description;
-        id = todo.id;
+        id = todo._id;
     };
-    li.querySelector("input[type='checkbox']").checked = todo.isComplete;
+    const checkbox = li.querySelector("input[type='checkbox']");
+    checkbox.checked = todo.isComplete;
+    checkbox.addEventListener(
+        'change',
+        (ev) => {
+            li.querySelector('span').innerHTML = `(${
+                checkbox.checked ? 'Complete' : 'Pending'
+            })`;
+            fetch(`http://localhost:3000/todos/${todo._id}`, {
+                method: 'PATCH',
+                body: JSON.stringify({
+                    isComplete: checkbox.checked,
+                }),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+        },
+        true
+    );
     todosContainer.appendChild(li);
 }
