@@ -1,0 +1,12 @@
+<div class="container">
+  <h1>Active users</h1>
+  <div class="row mt-5">
+    <div class="col-12 my-3" *ngFor="let user of users">
+      <div class="p-3 border rounded d-flex justify-content-between"> {{user.userName}} <i style="cursor: pointer;"
+          (click)="call(user._id)">Call</i>
+      </div>
+    </div>
+  </div>
+</div>
+<video #remoteStream muted="true" controls="true" autoplay></video>
+<video #localStream muted="true" controls="true" autoplay></video>
