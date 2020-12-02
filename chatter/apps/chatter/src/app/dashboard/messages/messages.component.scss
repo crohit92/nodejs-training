@@ -1,0 +1,19 @@
+.profile__avatar {
+  img {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+  }
+  .profile__name {
+    font-size: 0.9rem;
+  }
+}
+.search {
+  .search-button {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+.chatter-bg-primary {
+  background-color: #e0f2f1;
+}
