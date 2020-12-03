@@ -1,19 +1,50 @@
-.profile__avatar {
-  img {
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 50%;
+.left-section {
+  max-height: 100vh;
+  overflow: auto;
+  .profile__avatar {
+    img {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+    }
+    .profile__name {
+      font-size: 0.9rem;
+    }
   }
-  .profile__name {
-    font-size: 0.9rem;
+  .search {
+    .search-button {
+      top: 50%;
+      transform: translateY(-50%);
+    }
   }
-}
-.search {
-  .search-button {
-    top: 50%;
-    transform: translateY(-50%);
+
+  .user-list {
+    .user {
+      &.active {
+        background-color: #ccf4ed;
+      }
+      &:hover {
+        background-color: #e3f5f2;
+      }
+      .user__avatar {
+        img {
+          border-radius: 50%;
+          width: 45px;
+          height: 45px;
+        }
+      }
+      .user__info {
+        flex-grow: 1;
+        font-size: 0.9rem;
+        .user__info--status {
+          color: gray;
+          font-size: 0.8rem;
+        }
+      }
+    }
   }
-}
-.chatter-bg-primary {
-  background-color: #e0f2f1;
+  .chatter-bg-primary {
+    // background-color: #e0f2f1;
+    background-color: #ebf1f0;
+  }
 }
