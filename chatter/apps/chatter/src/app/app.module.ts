@@ -15,12 +15,12 @@ import { AppComponent } from './app.component';
         children: [{
           path: "dashboard",
           loadChildren: () => import("./dashboard/dashboard.module").then(res => res.DashboardModule)
+        },
+        {
+          path: "",
+          pathMatch: "full",
+          redirectTo: "dashboard/messages"
         }]
-      },
-      {
-        path: "",
-        pathMatch: "full",
-        redirectTo: "/dashboard/messages"
       }
     ])
   ],
