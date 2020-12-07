@@ -21,6 +21,7 @@ export class UsersComponent implements OnInit {
       password
     }).subscribe((res: any) => {
       sessionStorage.setItem("token", res.token);
+      sessionStorage.setItem("userId", res.user._id);
       this.router.navigateByUrl("/dashboard/messages");
     });
   }

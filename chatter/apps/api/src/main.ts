@@ -4,12 +4,13 @@
  */
 // const express = require("express");
 import * as express from 'express';
-import { Server } from "socket.io";
+import { Server, Socket } from "socket.io";
 import { createServer } from 'http'
 import { router as v1Routes } from "./config/routes";
 import { json } from "body-parser";
 import { connect } from "mongoose";
 import * as cors from "cors";
+import { messagesSocketHandller } from './app/v1/users/users.controller';
 const app = express();
 const server = createServer(app);
 const io = new Server(server, {
@@ -18,6 +19,9 @@ const io = new Server(server, {
     methods: "*",
     origin: "*",
   }
+});
+io.on("connection", (socket: Socket) => {
+  messagesSocketHandller(socket);
 });
 app.use(cors({
   methods: "*",

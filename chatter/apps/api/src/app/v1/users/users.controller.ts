@@ -1,6 +1,7 @@
 import { User } from './user.model'
 import { Router } from "express";
 import { sign } from "jsonwebtoken";
+import { Socket } from 'socket.io';
 
 const router = Router();
 
@@ -13,8 +14,10 @@ router.post("/", (req, res) => {
 router.post("/login", (req, res) => {
   User.findOne(req.body).then((user: any) => {
     if (user) {
-      const token = sign({ username: user.username, password: user.password }, "MYSECRETKEY");
-      res.json({ token });
+      const _user = user.toObject();
+      delete _user.password;
+      const token = sign({ _user }, "MYSECRETKEY");
+      res.json({ user: _user, token });
       return;
     }
     res.status(401).json({
@@ -31,8 +34,22 @@ router.get("/", (req, res) => {
       res.status(500).json(err);
       return;
     }
-    res.json(users);
+    res.json(users.map((u: any) => {
+      const _u = u.toObject();
+      delete _u.password;
+      return _u;
+    }));
   });
 })
+
+export const messagesSocketHandller = (socket: Socket) => {
+  const uid: string = (socket.handshake.query as any).id;
+  socket.join(uid);
+  socket.on("message", (message: { to: string, message: string }) => {
+    socket.to(message.to).send({ from: uid, to: message.to, data: message.message })
+    // Save message in DB
+  });
+
+}
 
 export { router };
