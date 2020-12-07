@@ -18,12 +18,12 @@
         <div class="mt-3 border-bottom"></div>
       </div>
       <div class="user-list mt-3">
-        <div class="user p-3 active d-flex align-items-center">
+        <div class="user p-3 d-flex align-items-center" *ngFor="let user of users">
           <div class="user__avatar">
             <img src="https://static.toiimg.com/photo/72975551.cms" alt="" srcset="">
           </div>
           <div class="user__info ml-2">
-            <div class="user__info--name">Devender</div>
+            <div class="user__info--name">{{user.name}}</div>
             <div class="user__info--status">Last active 5 mins ago</div>
           </div>
         </div>
