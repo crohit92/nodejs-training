@@ -1,6 +1,7 @@
 import { User } from './user.model'
 import { Router } from "express";
 import { sign } from "jsonwebtoken";
+import { router as userMessagesController } from "./messages/messages.controller";
 
 const router = Router();
 
@@ -13,8 +14,9 @@ router.post("/", (req, res) => {
 router.post("/login", (req, res) => {
   User.findOne(req.body).then((user: any) => {
     if (user) {
-      const token = sign({ username: user.username, password: user.password }, "MYSECRETKEY");
-      res.json({ token });
+      const payload = { name: user.name, username: user.username, _id: user._id };
+      const token = sign(payload, "MYSECRETKEY");
+      res.json({ user: payload, token });
       return;
     }
     res.status(401).json({
@@ -35,4 +37,8 @@ router.get("/", (req, res) => {
   });
 })
 
+router.use("/:id/messages", userMessagesController);
+
 export { router };
+
+//users/id/messages?with=otherUserId

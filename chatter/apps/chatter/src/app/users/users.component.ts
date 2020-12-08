@@ -20,6 +20,7 @@ export class UsersComponent implements OnInit {
       username,
       password
     }).subscribe((res: any) => {
+      sessionStorage.setItem("user", JSON.stringify(res.user));
       sessionStorage.setItem("token", res.token);
       this.router.navigateByUrl("/dashboard/messages");
     });
