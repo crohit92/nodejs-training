@@ -73,9 +73,25 @@
         &.ours {
           align-self: flex-end;
           background-color: #ccf4ed;
+          img {
+            display: none;
+          }
         }
         &.theirs {
+          $margin-left: 58px;
           background-color: #f7f7f7;
+          margin-left: $margin-left;
+          position: relative;
+          & img {
+            position: absolute;
+            left: -$margin-left;
+            top: 0;
+            // content: '';
+            width: 48px;
+            height: 48px;
+            background-color: #000;
+            border-radius: 50%;
+          }
         }
       }
     }
