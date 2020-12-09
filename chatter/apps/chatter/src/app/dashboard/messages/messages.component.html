@@ -40,16 +40,17 @@
         <div class="chat__messages d-flex flex-column">
           <div class="message"
             [ngClass]="{'ours':message.from===currentUser?._id, 'theirs': message.from!==currentUser?._id}"
-            *ngFor="let message of userMessages$ | async"> {{message.data}} </div>
+            *ngFor="let message of messages"> {{message.data}} </div>
         </div>
-        <div class="w-100 chat__send position-absolute d-flex align-items-center p-3">
+        <form (ngSubmit)="sendMessage()" [formGroup]="chatFormGroup"
+          class="w-100 chat__send position-absolute d-flex align-items-center p-3">
           <div class="chat__send--text">
-            <input #chatTextEl type="text" class="w-100">
+            <input formControlName="data" type="text" class="w-100">
           </div>
           <div class="chat__send--action d-flex align-items-center">
-            <span class="material-icons ml-2" (click)="sendMessage(chatTextEl.value)"> send </span>
+            <button type="submit" class="border-0 material-icons ml-2"> send </button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   </div>

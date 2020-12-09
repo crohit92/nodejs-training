@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { Socket } from 'socket.io';
 import { IMessage, Message } from './message.model';
 
 const router = Router();
@@ -16,5 +17,15 @@ router.get('/', (req, res, next) => {
 
 export async function saveMessage(message: IMessage) {
   return await Message.create(message);
+}
+
+export function messagesSocketHandller(socket: Socket) {
+  const uid: string = (socket.handshake.query as any).id;
+  socket.join(uid);
+
+  socket.on("message", async (message: IMessage) => {
+    socket.to(message.to).emit("message", message);
+    await saveMessage(message);
+  })
 }
 export { router };

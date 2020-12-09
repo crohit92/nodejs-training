@@ -45,6 +45,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.4",
     "rxjs": "~6.5.5",
+    "socket.io": "^3.0.4",
+    "socket.io-client": "^3.0.4",
     "tslib": "^2.0.0",
     "zone.js": "^0.10.2"
   },

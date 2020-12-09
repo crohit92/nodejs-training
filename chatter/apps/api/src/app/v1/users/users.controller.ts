@@ -1,7 +1,8 @@
 import { User } from './user.model'
 import { Router } from "express";
-import { sign } from "jsonwebtoken";
+import { sign, verify } from "jsonwebtoken";
 import { router as userMessagesController } from "./messages/messages.controller";
+import { Types } from 'mongoose';
 
 const router = Router();
 
@@ -27,13 +28,24 @@ router.post("/login", (req, res) => {
   })
 });
 
-router.get("/", (req, res) => {
-  User.find((err, users) => {
+router.get("/", (req, res, next) => {
+  const token = req.get("authorization").split(" ").pop();
+  verify(token, "MYSECRETKEY", (err, payload) => {
     if (err) {
       res.status(500).json(err);
-      return;
+    } else {
+      (req as any).uid = (payload as any)._id;
+      next();
     }
+  })
+}, (req, res) => {
+  User.find({
+    _id: { $ne: Types.ObjectId((req as any).uid) }
+  }).select("-password").then((users) => {
     res.json(users);
+  }).catch(err => {
+    res.status(500).json(err);
+    return;
   });
 })
 
